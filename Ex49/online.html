@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <title> Online Classifields Search Form </title>
+    </head>
+    <body style="background-color: #cbfcff;">
+        <form id="searchForm">
+            <h1 style="text-align: left; color:red"> Online Classifields Search Form </h1>
+            <hr/>
+            <h4> 1) Search for a classified in the following sections: </h4>
+            <table>
+                <tr>
+                    <td> 
+                        <input type="radio" name="section" value="employment" id="employment">
+                        <label for="employment">Employment</label>
+                    </td>
+                    <td>
+                        <input type="radio" name="section" value="personal" id="personal">
+                        <label for="personal">Personal</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" name="section" value="forsale" id="forsale">
+                        <label for="forsale">For Sale</label>
+                    </td>
+                    <td>
+                        <input type="radio" name="section" value="miscellanecus" id="miscellanecus">
+                        <label for="miscellanecus">Miscellanecus</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" name="section" value="housing" id="housing">
+                        <label for="housing">Housing</label>
+                    </td>
+                    <td> 
+                        <input type="radio" name="section" value="services" id="services">
+                        <label for="services">All of the above</label>
+                    </td>
+                </tr>
+            </table>
+            <h4> 2) Search the following publications: </h4>
+            <table>
+                <tr>
+                    <td>
+                        <input type="checkbox" name="midwest" value="midwest" id="midwest">
+                        <label for="midwest">Midwest Times</label>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="modern" value="modern" id="modern">
+                        <label for="modern">Modern News</label>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="employment" value="employmenttoday" id="employmenttoday">
+                        <label for="employmenttoday">Employment Today</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" name="great" value="great" id="great">
+                        <label for="great">Great Lakes Classifieds</label>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="daily" value="daily" id="daily">
+                        <label for="daily">Middleton Daily</label>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="cashtown" value="cashtown" id="cashtown">
+                        <label for="cashtown">Cashtown Daily News</label>
+                    </td>
+                </tr>
+            </table>
+            <h4> 3) From to  <input type="date" name="from" id="from"/> to <input type="date" name="to" id="to"/> </h4>
+            <h4> 4) Enter a few keywords to describe the classified: </h4>
+            <input type="text" name="keywords" class="keywords" size="80" maxlength="100">
+            <h4> 5) Click one of the options below:  </h4>
+            <table>
+                <tr>
+                    <td>
+                        <input type="image" src="images/Search.gif" alt="Search" name="search" id="search" onclick="fakeSearch(); return false;">
+                    </td>
+                    <td>
+                        <input type="image" src="images/Help.gif" alt="Help" name="help" id="help" onclick="openHelp(); return false;">
+                    </td>
+                    <td>
+                        <input type="image" src="images/Cancel.gif" alt="Cancel" name="cancel" id="cancel" onclick="cancelForm(); return false;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <script>
+            function fakeSearch() {
+                alert("Giả lập Search");
+            }
+            function openHelp() {
+            window.open("help.html", "_self");
+            }
+            function cancelForm() {
+                document.getElementById("searchForm").reset();
+            }
+        </script>
+    </body>
+</html>
