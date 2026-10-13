@@ -1,0 +1,227 @@
+<html>
+    <head>
+        <title> Exercise 64</title>
+        <style>
+            .container {
+                width: 400px;
+                margin: 10px auto;
+                padding: 10px;
+                border: 1px solid black;
+            }
+
+            #clock {
+                margin-bottom: 14px;
+            }
+
+            #mouseMessage {
+                margin-bottom: 14px;
+                cursor: pointer;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            td {
+                border: 1px solid #999;
+                cursor: pointer;
+            }
+
+            .selected-row {
+                background-color: red;
+            }
+
+            .buttons {
+                margin-top: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div id="clock"></div>
+
+            <p id="mouseMessage">
+                Click chuột vào dòng này. Sẽ xuất hiện thông báo phím bấm của chuột
+            </p>
+
+            <table>
+                <tbody id="dataTable">
+                    <tr>
+                        <td>Thêm dòng mới ở đây</td>
+                        <td>Thêm dòng mới ở đây</td>
+                    </tr>
+                    <tr>
+                        <td>Thêm dòng mới ở đây</td>
+                        <td>Thêm dòng mới ở đây</td>
+                    </tr>
+                    <tr>
+                        <td>Thêm dòng mới ở đây</td>
+                        <td>Thêm dòng mới ở đây</td>
+                    </tr>
+                    <tr>
+                        <td>Dòng 1 cột 1</td>
+                        <td>Dòng 1 cột 2</td>
+                    </tr>
+                    <tr>
+                        <td>Dòng 2 cột 1</td>
+                        <td>Dòng 2 cột 2</td>
+                    </tr>
+                    <tr>
+                        <td>Dòng 3 cột 1</td>
+                        <td>Dòng 3 cột 2</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="buttons">
+                <button type="button" onclick="addRow()">Thêm vào</button>
+                <button type="button" onclick="deleteRedRows()">Xóa</button>
+                <button type="button" onclick="toggleSelectedRow()">Chỉ hiển dòng</button>
+                <button type="button" onclick="toggleSelectedColumn()">Chỉ hiển cột</button>
+                <button type="button" onclick="openNewPage()">Mở một trang mới</button>
+            </div>
+        </div>
+
+        <script>
+            var selectedColumn = -1;
+            var rowOnlyMode = false;
+            var columnOnlyMode = false;
+            var selectingColumn = false;
+
+            function updateClock() {
+                var now = new Date();
+                document.getElementById("clock").textContent =
+                    now.toLocaleTimeString("vi-VN", { hour12: false });
+            }
+
+            function handleMouseClick(event) {
+                event.preventDefault();
+
+                if (event.button === 0) {
+                    alert("Bạn vừa nhấn chuột trái.");
+                } else if (event.button === 2) {
+                    alert("Bạn vừa nhấn chuột phải.");
+                }
+            }
+
+            function addRow() {
+                var tbody = document.getElementById("dataTable");
+                var row = tbody.insertRow();
+
+                row.insertCell().textContent = "Thêm dòng mới ở đây";
+                row.insertCell().textContent = "Thêm dòng mới ở đây";
+
+                resetFilters();
+            }
+
+            function deleteRedRows() {
+                var tbody = document.getElementById("dataTable");
+                var rows = tbody.querySelectorAll(".selected-row");
+
+                for (var i = rows.length - 1; i >= 0; i--) {
+                    rows[i].remove();
+                }
+
+                resetFilters();
+            }
+
+            function toggleSelectedRow() {
+                var tbody = document.getElementById("dataTable");
+
+                if (rowOnlyMode) {
+                    resetFilters();
+                    return;
+                }
+
+                var selectedRow = tbody.querySelector(".selected-row");
+                if (!selectedRow) {
+                    alert("Vui lòng nhấn chọn một dòng trước.");
+                    return;
+                }
+
+                resetFilters();
+                rowOnlyMode = true;
+
+                for (var i = 0; i < tbody.rows.length; i++) {
+                    tbody.rows[i].style.display =
+                        tbody.rows[i] === selectedRow ? "" : "none";
+                }
+            }
+
+            function toggleSelectedColumn() {
+                if (columnOnlyMode || selectingColumn) {
+                    resetFilters();
+                    return;
+                }
+
+                selectingColumn = true;
+                alert("Bấm vào một ô thuộc cột bạn muốn hiển thị.");
+            }
+
+            function showSelectedColumn() {
+                var tbody = document.getElementById("dataTable");
+
+                resetFilters();
+                columnOnlyMode = true;
+
+                for (var i = 0; i < tbody.rows.length; i++) {
+                    for (var j = 0; j < tbody.rows[i].cells.length; j++) {
+                        tbody.rows[i].cells[j].style.display =
+                            j === selectedColumn ? "" : "none";
+                    }
+                }
+            }
+
+            function resetFilters() {
+                var tbody = document.getElementById("dataTable");
+
+                rowOnlyMode = false;
+                columnOnlyMode = false;
+                selectingColumn = false;
+
+                for (var i = 0; i < tbody.rows.length; i++) {
+                    tbody.rows[i].style.display = "";
+
+                    for (var j = 0; j < tbody.rows[i].cells.length; j++) {
+                        tbody.rows[i].cells[j].style.display = "";
+                    }
+                }
+            }
+
+            function openNewPage() {
+                window.open("https://tranduythanh.com", "_blank");
+            }
+
+            document.getElementById("mouseMessage").addEventListener(
+                "click",
+                handleMouseClick
+            );
+
+            document.getElementById("mouseMessage").addEventListener(
+                "contextmenu",
+                handleMouseClick
+            );
+
+            document.getElementById("dataTable").addEventListener("click", function(event) {
+                var cell = event.target.closest("td");
+                var row = event.target.closest("tr");
+
+                if (!cell || !row) {
+                    return;
+                }
+
+                if (selectingColumn) {
+                    selectedColumn = cell.cellIndex;
+                    showSelectedColumn();
+                    return;
+                }
+
+                row.classList.toggle("selected-row");
+            });
+
+            updateClock();
+            setInterval(updateClock, 1000);
+        </script>
+    </body>
+</html>

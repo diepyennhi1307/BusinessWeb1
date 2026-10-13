@@ -1,0 +1,245 @@
+<html>
+    <head>
+        <title>Exercise 63</title>
+        <style>
+            .form-table td {
+                padding: 2px;
+            }
+
+            #memberTable {
+                margin-top: 16px;
+                border-collapse: collapse;
+            }
+
+            #memberTable th,
+            #memberTable td {
+                border: 1px solid black;
+                padding: 3px;
+            }
+
+            #memberTable th {
+                color: white;
+                background-color: blue;
+            }
+        </style>
+
+        <script>
+            var members = [];
+
+            function loadDateOptions() {
+                var daySelect = document.getElementById("day");
+                var monthSelect = document.getElementById("month");
+                var yearSelect = document.getElementById("year");
+
+                for (var day = 1; day <= 31; day++) {
+                    daySelect.add(new Option(day, day));
+                }
+
+                for (var month = 1; month <= 12; month++) {
+                    monthSelect.add(new Option(month, month));
+                }
+
+                var currentYear = new Date().getFullYear();
+                for (var year = currentYear; year >= 1900; year--) {
+                    yearSelect.add(new Option(year, year));
+                }
+
+                yearSelect.value = "1970";
+            }
+
+            function getSelectedValue(groupName) {
+                var selected = document.querySelector(
+                    'input[name="' + groupName + '"]:checked'
+                );
+                return selected ? selected.value : "";
+            }
+
+            function getSelectedHobbies() {
+                var checkedHobbies = document.querySelectorAll(
+                    'input[name="hobby"]:checked'
+                );
+                var hobbies = [];
+
+                for (var i = 0; i < checkedHobbies.length; i++) {
+                    hobbies.push(checkedHobbies[i].value);
+                }
+
+                return hobbies.join(", ");
+            }
+
+            function isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            function registerMember() {
+                var name = document.getElementById("txtName").value.trim();
+                var email = document.getElementById("txtEmail").value.trim();
+
+                if (name === "") {
+                    alert("Vui lòng nhập tên.");
+                    document.getElementById("txtName").focus();
+                    return;
+                }
+
+                if (!isValidEmail(email)) {
+                    alert("Email không hợp lệ.");
+                    document.getElementById("txtEmail").focus();
+                    return;
+                }
+
+                var member = {
+                    name: name,
+                    email: email,
+                    gender: getSelectedValue("gender"),
+                    birthday:
+                        document.getElementById("day").value.padStart(2, "0") + "/" +
+                        document.getElementById("month").value.padStart(2, "0") + "/" +
+                        document.getElementById("year").value,
+                    hobbies: getSelectedHobbies(),
+                    favoriteColor: getSelectedValue("favoriteColor")
+                };
+
+                members.push(member);
+                displayMembers();
+            }
+
+            function displayMembers() {
+                var tbody = document.getElementById("memberTableBody");
+                tbody.innerHTML = "";
+
+                for (var i = 0; i < members.length; i++) {
+                    var member = members[i];
+                    var row = document.createElement("tr");
+
+                    var tdName = document.createElement("td");
+                    tdName.textContent = member.name;
+
+                    var tdEmail = document.createElement("td");
+                    tdEmail.textContent = member.email;
+
+                    var tdGender = document.createElement("td");
+                    tdGender.textContent = member.gender;
+
+                    var tdBirthday = document.createElement("td");
+                    tdBirthday.textContent = member.birthday;
+
+                    var tdHobbies = document.createElement("td");
+                    tdHobbies.textContent = member.hobbies;
+
+                    var tdColor = document.createElement("td");
+                    tdColor.textContent = member.favoriteColor;
+
+                    row.appendChild(tdName);
+                    row.appendChild(tdEmail);
+                    row.appendChild(tdGender);
+                    row.appendChild(tdBirthday);
+                    row.appendChild(tdHobbies);
+                    row.appendChild(tdColor);
+
+                    row.onmouseover = function() {
+                        this.style.backgroundColor = "yellow";
+                    };
+
+                    row.onmouseout = function() {
+                        this.style.backgroundColor = "white";
+                    };
+
+                    tbody.appendChild(row);
+                }
+            }
+
+            function continueRegistration() {
+                document.getElementById("memberForm").reset();
+                document.getElementById("txtName").focus();
+            }
+
+            document.addEventListener("DOMContentLoaded", loadDateOptions);
+        </script>
+    </head>
+    <body>
+        <h1>Đăng ký thành viên</h1>
+        <hr>
+
+        <form id="memberForm">
+            <table class="form-table">
+                <tr>
+                    <td><label for="txtName">Tên(*)</label></td>
+                    <td><input type="text" id="txtName"></td>
+                </tr>
+                <tr>
+                    <td>Ngày sinh(*)</td>
+                    <td>
+                        Ngày: <select id="day"></select>
+                        Tháng: <select id="month"></select>
+                        Năm: <select id="year"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Giới tính(*)</td>
+                    <td>
+                        <label><input type="radio" name="gender" value="Nam" checked> Nam</label>
+                        <label><input type="radio" name="gender" value="Nữ"> Nữ</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="txtEmail">Email(*)</label></td>
+                    <td><input type="text" id="txtEmail"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Sở thích của bạn:</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <label><input type="checkbox" name="hobby" value="Mua sắm" checked> Mua sắm</label><br>
+                        <label><input type="checkbox" name="hobby" value="Du lịch" checked> Du lịch</label><br>
+                        <label><input type="checkbox" name="hobby" value="Tán gẫu" checked> Tán gẫu</label><br>
+                        <label><input type="checkbox" name="hobby" value="Đọc sách" checked> Đọc sách</label><br>
+                        <label><input type="checkbox" name="hobby" value="Nghe nhạc" checked> Nghe nhạc</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">Màu yêu thích của bạn:</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <label><input type="radio" name="favoriteColor" value="Màu xanh da trời" checked>
+                            <span style="background-color: blue; color: white;">Màu xanh da trời</span>
+                        </label><br>
+                        <label><input type="radio" name="favoriteColor" value="Màu đỏ">
+                            <span style="background-color: red;">Màu đỏ</span>
+                        </label><br>
+                        <label><input type="radio" name="favoriteColor" value="Màu vàng">
+                            <span style="background-color: yellow;">Màu vàng</span>
+                        </label><br>
+                        <label><input type="radio" name="favoriteColor" value="Màu xanh lá cây">
+                            <span style="background-color: green;">Màu xanh lá cây</span>
+                        </label><br>
+                        <label><input type="radio" name="favoriteColor" value="Màu xanh tím">
+                            <span style="background-color: violet;">Màu xanh tím</span>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="button" onclick="registerMember()">Đăng ký</button>
+                        <button type="button" onclick="continueRegistration()">Tiếp</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <table id="memberTable">
+            <thead>
+                <tr>
+                    <th>Tên</th>
+                    <th>Email</th>
+                    <th>Giới tính</th>
+                    <th>Năm sinh</th>
+                    <th>Sở thích</th>
+                    <th>Màu yêu thích</th>
+                </tr>
+            </thead>
+            <tbody id="memberTableBody"></tbody>
+        </table>
+    </body>
+</html>
